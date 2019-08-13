@@ -1,0 +1,16 @@
+#!/bin/bsh
+
+read -p "Run install [y/n]? " -n1 c
+test $c != y && exit
+echo
+
+WD=$(dirname "$0")
+. $WD/config
+
+ln -fs $PD/development.template /etc/slackpkg/templates/development.template
+
+export ROOT=$ROOTFS
+
+slackpkg -default_answer=n update
+slackpkg install-template development
+
