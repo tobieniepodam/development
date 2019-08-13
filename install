@@ -1,4 +1,4 @@
-#!/bin/bsh
+#!/bin/bash
 
 read -p "Run install [y/n]? " -n1 c
 test $c != y && exit
