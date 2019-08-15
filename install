@@ -1,16 +1,20 @@
 #!/bin/bash
 
 read -p "Run install [y/n]? " -n1 c
-test $c != y && exit
+test "$c" != 'y' && exit
 echo
 
-WD=$(dirname "$0")
-. $WD/config
+WD=$(realpath "`pwd`/`dirname $0`")
+ROOTFS="$WD/rootfs"
 
-ln -fs $PD/development.template /etc/slackpkg/templates/development.template
-
+cp -f $WD/development.template /etc/slackpkg/templates/development.template
 export ROOT=$ROOTFS
-
 slackpkg -default_answer=n update
 slackpkg install-template development
 
+mkdir -p $ROOTFS/root/install/{kernel,sb,deb\,rpm\,alien}
+mkdir -p $ROOTFS/etc/sbotools
+cat > $ROOTFS/etc/sbotools/sbotools.conf <<EOF
+JOBS=4
+PKG_DIR=/root/install/sb
+EOF
